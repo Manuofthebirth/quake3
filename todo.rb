@@ -1,4 +1,4 @@
-- Define log parser
+X Define log parser 
 - Define rules parser (game start/end) > module
 - Define game model
 - Parse each game*
