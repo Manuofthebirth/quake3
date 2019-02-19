@@ -2,13 +2,13 @@ require_relative "log_parser"
 
 class Player
 
-	attr_reader :id
-	attr_accessor :name, :kills, :score
+	attr_reader :id, :name
+	attr_accessor :kills, :score
 
-	def initialize(id, name, kills, score)
+	def initialize(id, name, score, kills)
 		@id = id
 		@name = name
-		@kills = 0
 		@score = 0
+		@kills = 0
 	end
 end
