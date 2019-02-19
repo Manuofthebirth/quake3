@@ -1,4 +1,4 @@
-require_relative "game"
+require "game"
 require "log_parser"
 
   describe Game do
@@ -10,10 +10,10 @@ require "log_parser"
     describe '#new' do
       it 'should have a start time' do
       	expect Rules.start_game_rule === '(@log_lines(0))'
-	  end
+	    end
 
-	  it 'should have an end time' do
-      	expect Rules.end_game_rule === '(@log_lines(514))'
-	  end
+  	  it 'should have an end time' do
+        	expect Rules.end_game_rule === '(@log_lines(514))'
+  	  end
     end
   end

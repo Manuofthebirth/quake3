@@ -1,13 +1,14 @@
+# Opening log file
+# readlines() will return an array of all of the lines
+
 class LogParser
-  def self.read_file(file = 'qgames.log')
-    lines_array = []
-    file = File.open(file, 'r')
-    file.each_line { |line| lines_array << line }
+	def self.read_file
+		File.open("one_game.log", "r") do |file|
+			file.readlines()
+		end
+	end
 
-    lines_array
-  end
-
-  def self.parse_log(file = 'qgames.log')
-    log_lines = LogParser.read_file('qgames.log')
-  end
+	def self.parse_log
+		log_lines = LogParser.read_file
+	end
 end
