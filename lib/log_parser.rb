@@ -1,3 +1,6 @@
+require_relative "player" 
+require_relative "game" 
+
 # Opening log file
 # readlines() will return an array of all of the lines
 
