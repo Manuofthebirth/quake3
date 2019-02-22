@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../lib/log_parser'
 require_relative '../lib/game'
-require 'pry-byebug'
+# require 'pry-byebug'
 
 
 describe LogParser do
@@ -22,6 +22,7 @@ describe LogParser do
     it 'returns separate game logs correctly' do
       game1_string = File.open('test/game_test1.txt').read
       game2_string = File.open('test/game_test2.txt').read
+      # binding.pry
       expect(log.game_logs[0]).to eq(game1_string)
       expect(log.game_logs[1]).to eq(game2_string)
     end
