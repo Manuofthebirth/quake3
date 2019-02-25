@@ -30,7 +30,7 @@ describe LogParser do
 
   describe '#games' do
     it 'returns an array of games' do
-      binding.pry
+      # binding.pry
       expect(log.games[0]).to be_a(Game)
     end
   end

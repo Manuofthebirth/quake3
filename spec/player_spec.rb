@@ -16,12 +16,10 @@ describe Player do
     end
 	end
 
-  describe '#add_kills' do
+  describe '#kills' do
     it 'return the kill score of the player' do
-      player.add_kills(2)
-      expect(player.kills).to eq(6)
-      player.add_kills(-1)
-      expect(player.kills).to eq(3)
+      expect(player.kills).to eq(4)
     end
   end
+
 end
