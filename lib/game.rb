@@ -1,36 +1,100 @@
 require_relative "log_parser" 
 require_relative "player" 
-require 'json'
 
 class Game
-	attr_reader :id
-	attr_accessor :players, :total_kills, :kill_by_means
-	# include LogParser
+	attr_accessor :game_match, :players, :total_kills, :means_of_death
 
 	def initialize(game_log_text)
-		@id = id
-		@players = {}
-		@total_kills = 0
-		@kills_by_means = []
+		@game_match = game_log_text
+    @players = []
+    @total_kills = 0
+    @means_of_death = {}
 	end
 
-	def self.player_info
-		# :player_id >> |space| |id| |1 or more digits| |space| |n\|
-		# :player_name >> |n\| |name| |ranges from words and spaces| |\t|
-		games.scan(Player::MATCHER).uniq
-		@players = player_info
-	end
+  def total_players
+    # :players names >> |any char until Client| |any char until n\| |name| |ranges from words and spaces| |\t|
+    players_names = game_match.scan(/.+ClientUserinfoChanged:.+n\\(?<name>[\w\s]+)\\t/).uniq
+    players << players_names.flatten
+    # :player_id >> |space| |id| |1 or more digits| |space| |n\|
+    # :player_name >> |n\| |name| |ranges from words and spaces| |\t|
+    # games.scan(/\s(?<id>\d)\sn\\(?<name>[\w\s]+)\\t/).uniq
+  end
 
-	def self.kill_info
-		# :killer_id >> |space| |id| |1 or more digits| |space| 
-		# :killed_id >> |space| |id| |1 or more digits| |any char|
-		# :mean_of_death_id >> |space| |id| |1 or more digits| |any char|
-		# :mean_of_death >> |mean| |every char from MOD until end of line|
-	    games.scan(/\s(?<killer_id>\d+)\s(?<killed_id>\d+)\s(?<mean_of_death_id>\d+).+(?<mean_of_death>MOD\w+)/)
+	def kill_events
+		# :killer >> |any char until Kill| |any char until :| |any char with killer name| |space| 
+		# :victim >> |space| |"killed"| |any char with victim name| |ranges from words and spaces| |by|
+    player_deaths = game_match.scan(/.+Kill:.+:\s*(?<killer>.+?)\skilled\s(?<victim>[\w\s]+)?by/)
+  end
+
+  def killer_infos
+    kill_events.map do |kill_event|
+      { killer: kill_event[0], victim: kill_event[1] }
     end
+  end
 
-  #   def game_stats
-		# JSON.parse('game { "total_kills": => @total_kills, "player_name": }')
+  def death_infos
+    # :means_of_death >> |any char until ... space, repeat| |any char with means of death|
+    kill_methods = game_match.scan(/.+Kill:.+:\s*.+\skilled\s.+\sby\s(?<means_of_death>.+)/)
+    kill_methods.group_by{|e| e}.map{|k, v| [k, v.length]}.to_h
+  end
+
+
+  # def game_info
+  #   index = 1
+  #   @results = {}
+
+  #   @game_match.each do |game|
+  #     if game.any?
+  #       @results.merge!(
+  #         "Game_#{index}" => {
+  #         total_kills: game.kill_event.size # count number of kill events
+  #         players: game.total_players,
+  #         kills: # player_kills(kills)
+  #         means_of_death: game.death_info
+  #       }
+  #       )
+  #       index += 1
+  #     end
   #   end
+  #   @results
+  # end
+
 end
 
+
+  # Kill event 1 = {
+  #   "killer" => "Zeh",
+  #   "victim" => "Dono da Bola"
+  #   "means_of_death" => "MOD_SHOTGUN"  
+  # }
+
+  # Kill event 2 = {
+  #   "killer" => "Zeh",
+  #   "victim" => "Isgalamido"
+  #   "means_of_death" => "MOD_SHOTGUN" 
+  # }
+
+  # Kill event 3 = {
+  #   "killer" => "<world>",
+  #   "victim" => "Zeh"
+  #   "means_of_death" => "MOD_GRENADE"
+  # }
+
+  # Player 1 = {
+  #   name => "Zeh"
+  #   kills => 1 (2 -1)
+  # }
+
+  # Player 2 = {
+  #   name => "Isgalamido"
+  #   kills => 0
+  # }
+
+  # Result:
+
+  # Game 1 = {
+  #   total_kills = 3
+  #   player_kills = {"Zeh" => 1, "Isgalamido" => 0}
+  #   means_of_death = {"MOD_SHOTGUN" => 2, "MOD_GRENADE" => 1}
+  #   }
+  # end

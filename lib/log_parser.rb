@@ -18,14 +18,4 @@ class LogParser
 	def games
 		game_logs.map { |game_log| Game.new(game_log) } # will return an array with each game log
 	end
-
-	# def self.read_file
-	# 	File.open("qgames.log", "r") do |file|
-	# 		file.readlines()
-	# 	end
-	# end
-
-	# def self.parse_log
-	# 	log_lines = LogParser.read_file
-	# end
 end
