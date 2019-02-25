@@ -11,17 +11,13 @@ describe Player do
       expect(player).to be_an(Player)
     end
 
-    it 'return the player name' do
+    it 'return the name of the player' do
       expect(player.name).to eq('Isgalamido')
-    end
-
-    it 'return number of kills of the player' do
-      expect(player.kills).to eq(4)
     end
 	end
 
   describe '#add_kills' do
-    it 'return the number of kills' do
+    it 'return the kill score of the player' do
       player.add_kills(2)
       expect(player.kills).to eq(6)
       player.add_kills(-1)

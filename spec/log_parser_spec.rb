@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../lib/log_parser'
 require_relative '../lib/game'
-# require 'pry-byebug'
+require 'pry-byebug'
 
 
 describe LogParser do
@@ -30,6 +30,7 @@ describe LogParser do
 
   describe '#games' do
     it 'returns an array of games' do
+      binding.pry
       expect(log.games[0]).to be_a(Game)
     end
   end
