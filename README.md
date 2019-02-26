@@ -6,6 +6,13 @@
 
 Include " --color " and " --format documentation " on .rspec file for testing
 
+## Run tasks
+
+In Terminal
+
+Task1 -> ruby lib/task1.rb
+Task2 -> ruby lib/task2.rb
+
 # Quake log parser
 
 ## Task 1
