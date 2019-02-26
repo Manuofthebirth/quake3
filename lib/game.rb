@@ -12,14 +12,11 @@ class Game
 	end
 
   def total_players
-    # :players names >> |any char until Client| |any char until n\| |name| |ranges from words and spaces| |\t|
     players_names = game_match.scan(/.+ClientUserinfoChanged:.+n\\(?<name>[\w\s]+)\\t/).uniq
     players << players_names.flatten
   end
 
 	def kill_events
-		# :killer >> |any char until Kill| |any char until :| |any char with killer name| |space| 
-		# :victim >> |space| |"killed"| |any char with victim name| |ranges from words and spaces| |by|
     game_match.scan(/.+Kill:.+:\s*(?<killer>.+?)\skilled\s(?<victim>[\w\s]+)?by/)
   end
 
@@ -30,7 +27,6 @@ class Game
   end
 
   def death_infos
-    # :means_of_death >> |any char until ... space, repeat| |any char with means of death|
     kill_methods = game_match.scan(/.+Kill:.+:\s*.+\skilled\s.+\sby\s(?<means_of_death>.+)/)
     kill_methods.group_by{|e| e}.map{|k, v| [k, v.length]}.to_h
   end

@@ -11,7 +11,6 @@ class LogParser
 	end
 
 	def game_logs
-		# |start of line| |any char except line break| |stop at Init| |any char| |stop at Shut at end| |\multi-lines|
 		raw_log.scan(/^[^\n]*?InitGame:.*?ShutdownGame:.*?$/m)
 	end
 
