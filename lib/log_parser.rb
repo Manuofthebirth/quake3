@@ -11,7 +11,7 @@ class LogParser
 	end
 
 	def game_logs
-		raw_log.scan(/^[^\n]*?InitGame:.*?ShutdownGame:.*?$/m)
+		raw_log.scan(/^[^\n]*?InitGame:.*?ShutdownGame:.*?$/m) # defining when a game begins and ends
 	end
 
 	def games
