@@ -12,34 +12,30 @@ class Game
 	end
 
   def total_players
-    # :players names >> |any char until Client| |any char until n\| |name| |ranges from words and spaces| |\t|
-    players_names = game_match.scan(/.+ClientUserinfoChanged:.+n\\(?<name>[\w\s]+)\\t/).uniq
+    players_names = game_match.scan(/.+ClientUserinfoChanged:.+n\\(?<name>[\w\s]+)\\t/).uniq # extracting an array with unique values
     players << players_names.flatten
   end
 
 	def kill_events
-		# :killer >> |any char until Kill| |any char until :| |any char with killer name| |space| 
-		# :victim >> |space| |"killed"| |any char with victim name| |ranges from words and spaces| |by|
-    game_match.scan(/.+Kill:.+:\s*(?<killer>.+?)\skilled\s(?<victim>[\w\s]+)?by/)
+    game_match.scan(/.+Kill:.+:\s*(?<killer>.+?)\skilled\s(?<victim>[\w\s]+)?by/) # extracting an array with killer and victim from a kill event
   end
 
   def killer_infos
     kill_events.map do |kill_event|
-      { killer: kill_event[0], victim: kill_event[1] }
+      { killer: kill_event[0], victim: kill_event[1] } # defining killer and victim
     end
   end
 
   def death_infos
-    # :means_of_death >> |any char until ... space, repeat| |any char with means of death|
     kill_methods = game_match.scan(/.+Kill:.+:\s*.+\skilled\s.+\sby\s(?<means_of_death>.+)/)
-    kill_methods.group_by{|e| e}.map{|k, v| [k, v.length]}.to_h
+    kill_methods.group_by{|e| e}.map{|k, v| [k, v.length]}.to_h # informing how many (and which) means of death happened during a game
   end
 
   def player_kills
-    players.each_with_object({}) { |play, hsh| hsh[play.name] = play.kills }
+    players.each_with_object({}) { |play, hsh| hsh[play.name] = play.kills } # defining players and kill scores
   end
 
-  def games_results
+  def games_results # what is shown in lib/task1 and lib/task2 
     index = 1
     @results = {}
 
